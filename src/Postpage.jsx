@@ -1,9 +1,10 @@
 import React from 'react'
-
 const Postpage = () => {
-  return (
-    <div>Postpage</div>
-  )
+    return (
+        <main>
+            postpage
+        </main>
+    )
 }
 
 export default Postpage;
