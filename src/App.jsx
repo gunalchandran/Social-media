@@ -1,44 +1,57 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react';
+import { Routes, Route } from 'react-router-dom';
 import About from './About';
 import Home from './Home';
 import Header from './Header';
 import Missing from './Missing';
-import Nav from './nav';
-import Newpost from './Newpost';
-import Postpage from './Postpage';
-import Postlayout from './Postlayout';
-import Post from './Post';
-import { Link, Routes, Route } from 'react-router-dom';
+import Nav from './Nav';
+import NewPost from './Newpost';
+import PostPage from './Postpage';
+
 const App = () => {
+  const [posts, setPosts] = useState([
+    {
+      id: 1,
+      title: "Food Vlog",
+      datetime: "April 5, 2004 11:23:13",
+      body: "Veg Biryani"
+    },
+    {
+      id: 2,
+      title: "Travel Vlog",
+      datetime: "April 6, 2004 09:15:00",
+      body: "Trip to Ooty"
+    },
+    {
+      id: 3,
+      title: "Tech Vlog",
+      datetime: "April 7, 2004 14:05:33",
+      body: "React Basics"
+    },
+  ]);
+
+  const [search, setSearch] = useState('');
+  const [searchResult, setSearchResult] = useState([]);
+
+  // This can be used later to implement search filtering logic
+  useEffect(() => {
+    setSearchResult(
+      posts.filter(post =>
+        post.title.toLowerCase().includes(search.toLowerCase())
+      )
+    );
+  }, [search, posts]);
+
   return (
-    <div className='text-bold'>
-      <nav className='text-blue'>
-        <ul>
-          <li><Link to='/'>Home</Link></li>
-          <li><Link to='/about'>About</Link></li>
-          <li><Link to='/postpage'>Postpage</Link></li>
-        </ul>
-      </nav>
-      <Routes>
-        <Route path='/' element={<Home />} />
-        <Route path='/about' element={<About />} />
-        <Route path='/newpost' element={<Newpost />} />
-        <Route path='/postpage' element={<Postlayout/>} >
-          <Route index element={<Postpage />} />
-          <Route path=':id' element={<Post />} />
-          <Route path='newpost' element={<Newpost />} />
-        </Route>
-        <Route path='*' element='missing'>Missing</Route>
-      </Routes>
-      {/* <Home />
-      <Header />
-      <About />
-       <Nav/>
-       <Missing />
-       <Newpost />
-       <Postpage /> */}
+    <div>
+      <Header title="Social Media app" />
+      <Nav 
+        search={search}
+        setSearch={setSearch}
+      />
+      <Home posts={searchResult.length > 0 ? searchResult : posts} />
     </div>
-  )
+  );
 }
 
 export default App;
